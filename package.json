@@ -1,0 +1,35 @@
+{
+  "name": "dev_connector_app",
+  "version": "1.0.0",
+  "description": "social media application for web-developers",
+  "main": "server.js",
+  "engines": {
+    "node": "8.11.3",
+    "npm": "6.4.0"
+  },
+  "scripts": {
+    "dev": "nodemon server"
+  },
+  "keywords": [
+    "reactjs",
+    "mongodb",
+    "nodejs",
+    "expressjs",
+    "bootstrapCSS"
+  ],
+  "author": "C0D1NGD0J0",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mongoose": "^5.2.12",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^10.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
