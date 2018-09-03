@@ -1,10 +1,18 @@
 const express = require("express");
 const app = express();
+const bodyParser = require('body-parser');
 const port = (process.env.PORT || 3000);
 const isProductionEnv = (process.env.NODE_ENV === "production");
 
+// MIDDLEWARE
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 // DATABASE
 require("./app/Database");
+
+// MODELS
+require("./app/Models/User");
 
 // ROUTES
 app.use("/api", require("./app/Routes/users"));
