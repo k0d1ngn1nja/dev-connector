@@ -44,6 +44,10 @@ const authCntrl = {
 				}
 			});
 		}).catch(err => console.log(err));
+	},
+
+	currentUser: (req, res, next) =>{
+		res.json(req.user);
 	}
 };
 

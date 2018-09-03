@@ -2,11 +2,13 @@ const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
 const port = (process.env.PORT || 3000);
+const passport = require("passport");
 const isProductionEnv = (process.env.NODE_ENV === "production");
 
 // MIDDLEWARE
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
+require("./app/Config/passport")(passport);
 
 // DATABASE
 require("./app/Database");
