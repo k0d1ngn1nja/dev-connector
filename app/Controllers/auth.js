@@ -3,10 +3,16 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../Config/keys");
+const validate = require("../Utility/validations");
 
 const authCntrl = {
 	register: (req, res, next) =>{
 		const {email, name, password, avatar} = req.body;
+		const {errors, isValid} = validate.signupInput(req.body);
+		
+		if(!isValid){
+			return res.status(400).json(errors);
+		}
 
 		User.findOne({email: email}).then(user =>{
 			if(user) {
@@ -28,9 +34,18 @@ const authCntrl = {
 
 	login: (req, res, next) =>{
 		const { email, password } = req.body;
+		const {errors, isValid} = validate.loginInput(req.body);
 		
+		if(!isValid){
+			return res.status(400).json(errors);
+		};
+
 		User.findOne({email}).then((user) =>{
-			if(!user) return res.status(400).json({email: "User not found!"});
+			if(!user) {
+				errors.email = "User not found!";
+				return res.status(400).json(errors);
+			};
+
 			bcrypt.compare(password, user.password).then(isMatch => {
 				if(isMatch){
 					const payload = {id: user.id, name: user.name, avatar: user.avatar}; //jwt payload
@@ -40,7 +55,8 @@ const authCntrl = {
 						res.json({success: true, token: "Bearer " + token});
 					});
 				} else {
-					return res.status(400).json({password: "Password incorrect."});
+					errors.password = "Password incorrect.";
+					return res.status(400).json(errors);
 				}
 			});
 		}).catch(err => console.log(err));
