@@ -1,6 +1,8 @@
 const User = require("../Models/User");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const keys = require("../Config/keys");
 
 const authCntrl = {
 	register: (req, res, next) =>{
@@ -31,7 +33,12 @@ const authCntrl = {
 			if(!user) return res.status(400).json({email: "User not found!"});
 			bcrypt.compare(password, user.password).then(isMatch => {
 				if(isMatch){
-					res.json({msg: "Success"});
+					const payload = {id: user.id, name: user.name, avatar: user.avatar}; //jwt payload
+					
+					//signed token
+					jwt.sign(payload, keys.secret, {expiresIn: 3600}, (err, token) =>{
+						res.json({success: true, token: "Bearer " + token});
+					});
 				} else {
 					return res.status(400).json({password: "Password incorrect."});
 				}
