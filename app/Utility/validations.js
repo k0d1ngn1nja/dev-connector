@@ -4,6 +4,14 @@ const isEmpty = (value) =>(
 	value === undefined || value === null || (typeof value === "object" && Object.keys(value).length === 0) || (typeof value === "string" && value.trim().length === 0)
 );
 
+const validateSocialLinks = (data, smtype) =>{
+	if(!isEmpty(data.smtype)){
+		if(!Validator.isURL(data.smtype)){
+			errors.smtype = "Not a valid URL";
+		}
+	}	
+};
+
 module.exports = {
 	signupInput: (data) =>{
 		let errors = {};
@@ -72,5 +80,40 @@ module.exports = {
 			errors,
 			isValid: isEmpty(errors)
 		}
-	}
+	},
+
+	profileCreate: (data) =>{
+		let errors = {};
+
+		data.handle = !isEmpty(data.handle) ? data.handle : "";
+		data.status = !isEmpty(data.status) ? data.status : "";
+		data.skills = !isEmpty(data.skills) ? data.skills : "";
+		
+		if(!Validator.isLength(data.handle, {min: 2, max: 25})){
+			errors.handle = "Handle needs to between 2 and 25 characters.";
+		}
+
+		if(Validator.isEmpty(data.handle)){
+			errors.handle = "Profile handle is required.";
+		}
+		
+		if(Validator.isEmpty(data.status)){
+			errors.status = "Status field is required.";
+		}
+		
+		if(Validator.isEmpty(data.skills)){
+			errors.skills = "Skills field is required.";
+		}
+
+		if(!isEmpty(data.website)){
+			if(!Validator.isURL(data.website)){
+				errors.website = "Not a valid URL";
+			}
+		}
+
+		return{
+			errors,
+			isValid: isEmpty(errors)
+		}
+	},
 }

@@ -63,7 +63,12 @@ const authCntrl = {
 	},
 
 	currentUser: (req, res, next) =>{
-		res.json(req.user);
+		const user = {
+			id: req.user.id,
+			email: req.user.email,
+			name: req.user.name
+		}
+		res.json(user);
 	}
 };
 

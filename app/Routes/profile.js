@@ -4,6 +4,8 @@ const passport = require("passport");
 const profileCntrl = require("../Controllers/profile");
 const { protectRoute } = require("../Config/middlewares");
 
-router.get("/", passport.authenticate("jwt", {session: false}), profileCntrl.profile);
+router.get("/", passport.authenticate("jwt", {session: false}), profileCntrl.show);
+
+router.post("/", passport.authenticate("jwt", {session: false}), profileCntrl.create);
 
 module.exports = router;
