@@ -15,14 +15,13 @@ require("./app/Database");
 
 // MODELS
 require("./app/Models/User");
+require("./app/Models/Profile");
 
 // ROUTES
 app.use("/api", require("./app/Routes/users"));
 app.use("/api/profile", require("./app/Routes/profile"));
 app.use("/api/posts", require("./app/Routes/posts"));
 
-
-app.get("/", (req, res) => res.send("Hello there"));
 
 app.listen(port, (err) =>{
 	if(err) return console.log("Server error has occured: ", err);

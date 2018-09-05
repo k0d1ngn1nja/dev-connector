@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const postCntrl = require("../Controllers/profile");
+const passport = require("passport");
+const profileCntrl = require("../Controllers/profile");
+const { protectRoute } = require("../Config/middlewares");
 
-router.get("/test", (req, res) =>{
-	res.json({msg: "Profile route is working!"});
-});
+router.get("/", passport.authenticate("jwt", {session: false}), profileCntrl.profile);
 
 module.exports = router;
