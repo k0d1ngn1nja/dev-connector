@@ -126,7 +126,6 @@ const profileCntrl = {
 			
 			profile.experience.unshift(newexp);
 			profile.save().then(profile => res.json(profile));
-
 		}).catch(err => res.status(404).json(err));
 	},
 
@@ -151,6 +150,30 @@ const profileCntrl = {
 			profile.education.unshift(newedu);
 			profile.save().then(profile => res.json(profile));
 
+		}).catch(err => res.status(404).json(err));
+	},
+
+	deleteExperience: (req, res, next) =>{
+		Profile.findOne({user: req.user.id}).then((profile) =>{
+			const removeIndex = profile.experience.map(item => item.id).indexOf(req.params.exp_id);
+			profile.experience.splice(removeIndex, 1);
+
+			profile.save().then((profile) => res.json(profile));
+		}).catch((err) => res.status(404).json(err));
+	},
+
+	deleteEducation: (req, res, next) =>{
+		Profile.findOne({user: req.user.id}).then((profile) =>{
+			const removeIndex = profile.education.map(item => item.id).indexOf(req.params.edu_id);
+			profile.education.splice(removeIndex, 1);
+
+			profile.save().then((profile) => res.json(profile));
+		}).catch((err) => res.status(404).json(err));
+	},
+
+	deleteUserProfile: (req, res, next) =>{
+		Profile.findOneAndRemove({user: req.user.id}).then(() =>{
+			User.findOneAndRemove({_id: req.user.id}).then(() => res.json({success: true}));
 		}).catch(err => res.status(404).json(err));
 	}
 }
