@@ -18,7 +18,7 @@ const profileCntrl = {
 	},
 
 	create: (req, res, next) =>{
-		const {errors, isValid} = validate.profileCreate(req.body);
+		const {errors, isValid} = validate.profileInput(req.body);
 
 		if(!isValid){
 			return res.status(400).json(errors);
@@ -103,6 +103,54 @@ const profileCntrl = {
 			}
 
 			return res.json(profiles);
+		}).catch(err => res.status(404).json(err));
+	},
+
+	addExperience: (req, res, next) =>{
+		const {errors, isValid} = validate.experienceInput(req.body);
+
+		if(!isValid){
+			return res.status(400).json(errors);
+		}
+
+		Profile.findOne({user: req.user.id}).then((profile) =>{
+			const newexp = {
+				title: req.body.title,
+				company: req.body.company,
+				location: req.body.location,
+				startDate: req.body.startDate,
+				endDate: req.body.endDate,
+				current: req.body.current,
+				description: req.body.description
+			};
+			
+			profile.experience.unshift(newexp);
+			profile.save().then(profile => res.json(profile));
+
+		}).catch(err => res.status(404).json(err));
+	},
+
+	addEducation: (req, res, next) =>{
+		const {errors, isValid} = validate.educationInput(req.body);
+
+		if(!isValid){
+			return res.status(400).json(errors);
+		}
+
+		Profile.findOne({user: req.user.id}).then((profile) =>{
+			const newedu = {
+				school: req.body.school,
+				degree: req.body.degree,
+				fieldofstudy: req.body.fieldofstudy,
+				startDate: req.body.startDate,
+				endDate: req.body.endDate,
+				current: req.body.current,
+				description: req.body.description
+			};
+			
+			profile.education.unshift(newedu);
+			profile.save().then(profile => res.json(profile));
+
 		}).catch(err => res.status(404).json(err));
 	}
 }

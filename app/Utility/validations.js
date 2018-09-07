@@ -4,10 +4,10 @@ const isEmpty = (value) =>(
 	value === undefined || value === null || (typeof value === "object" && Object.keys(value).length === 0) || (typeof value === "string" && value.trim().length === 0)
 );
 
-const validateSocialLinks = (data, smtype) =>{
+const validateSocialLinks = (data, socialtype) =>{
 	if(!isEmpty(data.smtype)){
-		if(!Validator.isURL(data.smtype)){
-			errors.smtype = "Not a valid URL";
+		if(!Validator.isURL(data.socialtype)){
+			errors.socialtype = "Not a valid URL";
 		}
 	}	
 };
@@ -82,7 +82,7 @@ module.exports = {
 		}
 	},
 
-	profileCreate: (data) =>{
+	profileInput: (data) =>{
 		let errors = {};
 
 		data.handle = !isEmpty(data.handle) ? data.handle : "";
@@ -116,4 +116,61 @@ module.exports = {
 			isValid: isEmpty(errors)
 		}
 	},
+
+	experienceInput: (data) =>{
+		let errors = {};
+		
+		// required fields
+		data.title = !isEmpty(data.title) ? data.title : "";
+		data.company = !isEmpty(data.company) ? data.company : "";
+		data.startDate = !isEmpty(data.startDate) ? data.startDate : "";
+		
+		if(Validator.isEmpty(data.title)){
+			errors.title = "Job Title field is required.";
+		}
+
+		if(Validator.isEmpty(data.company)){
+			errors.company = "Company name field is required.";
+		}
+
+		if(Validator.isEmpty(data.startDate)){
+			errors.startDate = "Start date field is required.";
+		}
+
+		return{
+			errors,
+			isValid: isEmpty(errors)
+		}
+	},
+
+	educationInput: (req, res, next) =>{
+		let errors = {};
+		
+		// required fields
+		data.school = !isEmpty(data.school) ? data.school : "";
+		data.degree = !isEmpty(data.degree) ? data.degree : "";
+		data.fieldofstudy = !isEmpty(data.fieldofstudy) ? data.fieldofstudy : "";
+		data.startDate = !isEmpty(data.startDate) ? data.startDate : "";
+
+		if(Validator.isEmpty(data.school)){
+			errors.school = "School name is required.";
+		}
+
+		if(Validator.isEmpty(data.degree)){
+			errors.degree = "Degree field is required.";
+		}
+
+		if(Validator.isEmpty(data.fieldofstudy)){
+			errors.fieldofstudy = "Field of Study is required.";
+		}
+
+		if(Validator.isEmpty(data.startDate)){
+			errors.startDate = "Start date field is required.";
+		}
+
+		return{
+			errors,
+			isValid: isEmpty(errors)
+		}		
+	}
 }
