@@ -1,7 +1,17 @@
 const Post = require("../Models/Post");
+const Profile = require("../Models/Profile");
 const validate = require("../Utility/validations");
 
 const postCntrl = {
+	index: (req, res, next) =>{
+		Post.find().sort({date: -1}).then((posts) => res.json(posts)).catch((err) => res.status(404).json(err));
+	},
+
+	show: (req, res, next) =>{
+		Post.findById(req.params.id).then((post) => res.json(post))
+			.catch(err => res.status(404).json({error: "No post found with that Id."}));
+	},
+
 	create: (req, res, next) =>{
 		const { errors, isValid } = validate.postIput(req.body);
 		
@@ -17,6 +27,18 @@ const postCntrl = {
 		});
 
 		newpost.save().then(post => res.json(post));
+	},
+
+	delete: (req, res, next) =>{
+		Profile.findOne({user: req.user.id}).then(profile =>{
+			Post.findById(req.params.id).then(post =>{
+				if(post.author.toString() !== req.user.id){
+					return res.status(401).json({error: "User not authorized!"});
+				}
+
+				post.remove().then(() => res.json({success: true}));
+			}).catch(err => res.status(404).json({error: "Post not found!"}));
+		}).catch((err) => res.status(404).json(error));
 	}
 };
 

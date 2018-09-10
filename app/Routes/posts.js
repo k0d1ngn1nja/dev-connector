@@ -3,6 +3,12 @@ const router = express.Router();
 const passport = require("passport");
 const postCntrl = require("../Controllers/post");
 
+router.get("/", postCntrl.index);
+
+router.route("/:id")
+	.get(postCntrl.show)
+	.delete(passport.authenticate("jwt", {session: false}), postCntrl.delete);
+
 router.post("/", passport.authenticate("jwt", {session: false}), postCntrl.create);
 
 module.exports = router;
