@@ -15,6 +15,7 @@ require("./app/Database");
 
 // MODELS
 require("./app/Models/User");
+require("./app/Models/Post");
 require("./app/Models/Profile");
 
 // ROUTES
