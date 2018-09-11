@@ -65,11 +65,46 @@ const postCntrl = {
 		Profile.findOne({user: req.user.id}).then(profile =>{
 			Post.findById(req.params.id).then(post =>{
 				filterLikes(post);
-				post.likes.unshift({user: req.user.id});
+				const removeIndex = post.likes.map(item => item.user.toString()).indexOf(req.user.id);
+				post.likes.splice(removeIndex, 1);
+
 				post.save().then(post => res.json(post)).catch(err => res.status(404).json(err));
 			}).catch(err => res.status(404).json({error: "Post not found!"}));
-		}).catch((err) => res.status(404).json(error));
-	}
+		}).catch((err) => console.log("Error: ", err));
+	},
+
+	createComment: (req, res, next) =>{
+		const { errors, isValid } = validate.postIput(req.body);
+		
+		if(!isValid){
+			return res.status(400).json(errors);
+		};
+
+		Post.findById(req.params.id).then((post) =>{
+			const newcomment = {
+				text: req.body.text,
+				name: req.body.name,
+				avatar: req.body.avatar,
+				user: req.user.id
+			};
+
+			post.comments.unshift(newcomment);
+			post.save().then(post => res.json(post)).catch(err => res.status(404).json({error: "No post found."}));
+		}).catch(err => res.status(404).json(err));
+	},
+
+	deleteComment: (req, res, next) =>{
+		Post.findById(req.params.id).then((post) =>{
+			if(post.comments.filter(comment => comment._id.toString() === req.params.comment_id).length === 0){
+				return res.status(404).json({error: "Comment doesn't exist."});
+			}
+			
+			const removeIndex = post.comments.map(item => item._id.toString()).indexOf(req.params.comment_id);
+			post.comments.splice(removeIndex, 1);
+
+			post.save().then(post => res.json(post)).catch(err => res.status(404).json({error: err}));
+		}).catch(err => res.status(404).json(err));
+	},
 };
 
 module.exports = postCntrl;
