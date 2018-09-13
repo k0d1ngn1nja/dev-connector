@@ -25,7 +25,7 @@ const authCntrl = {
 					bcrypt.hash(_user.password, salt, (err, hash) =>{
 						if(err) throw err;
 						_user.password = hash;
-						_user.save().then(user => res.json(user)).catch(err => console.log(err));
+						_user.save().then(user => res.json(user)).catch(err => console.log("Server Error: ", err));
 					});
 				});
 			};
