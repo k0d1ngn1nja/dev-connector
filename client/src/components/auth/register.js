@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import axios from "axios";
+import PropTypes from "prop-types";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
+import { withRouter } from "react-router-dom";
 
 class Register extends Component {
 	state = {
@@ -26,10 +27,13 @@ class Register extends Component {
 			password2: this.state.password2,
 		};
 		
-		this.props.registerUser(newuser);
-		// axios.post("/api/register", newuser)
-		// 	.then(res => console.log(res.data))
-		// 	.catch(err => this.setState({errors: err.response.data}));
+		this.props.registerUser(newuser, this.props.history);
+	}
+
+	componentWillReceiveProps(nextProps){
+		if(nextProps.errors){
+			this.setState({errors: nextProps.errors});
+		}
 	}
 
 	render() {
@@ -110,4 +114,15 @@ class Register extends Component {
 	}
 }
 
-export default connect(null, { registerUser })(Register);
+Register.propTypes = {
+	registerUser: PropTypes.func.isRequired,
+	auth: PropTypes.object.isRequired,
+	errors: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state =>({
+	auth: state.auth,
+	errors: state.errors
+});
+
+export default connect(mapStateToProps, { registerUser })(withRouter(Register));
