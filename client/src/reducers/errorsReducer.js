@@ -8,7 +8,7 @@ const errorsReducer = function(state = initialState, action){
 			return action.payload;
 		default:
 			return state;
-	};
+	}
 };
 
 export default errorsReducer;

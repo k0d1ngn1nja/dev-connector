@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
+import { registerUserAction } from "../../actions/authActions";
 import { withRouter } from "react-router-dom";
 
 class Register extends Component {
@@ -12,6 +12,12 @@ class Register extends Component {
 		password: "",
 		password2: "",
 		errors: {}
+	}
+	
+	componentDidMount(){
+		if(this.props.auth.isAuthenticated){
+			this.props.history.push("/dashboard");
+		}
 	}
 	
 	onInputChange = (e) =>{
@@ -125,4 +131,4 @@ const mapStateToProps = state =>({
 	errors: state.errors
 });
 
-export default connect(mapStateToProps, { registerUser })(withRouter(Register));
+export default connect(mapStateToProps, { registerUserAction })(withRouter(Register));
