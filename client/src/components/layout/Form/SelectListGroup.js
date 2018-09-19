@@ -1,30 +1,30 @@
 import React from 'react';
 import classnames from "classnames";
 
-const TextFieldGroup = (props) => {
-	const {name, placeholder, value, error, info, type, onChange, disabled} = props;
+const SelectListGroup = (props) => {
+	const {name, value, error, info, onChange, options} = props;
+  
+  const selectOptions = options.map((option) =>(
+    <option key={option.label} value={option.value}>
+      {option.label}
+    </option>
+  ))
 
   return (
     <div className="form-group">
-      <input
-      	name={name}
-      	type={type} 
+      <select
+      	name={name} 
       	value={value}
       	onChange={onChange}
-      	placeholder={placeholder}
-      	disabled={disabled}
       	className={classnames("form-control form-control-lg", {
       		"is-invalid": error
-      	})}
-      />
+      	})}>
+        {selectOptions}
+      </select>
       {info && <small className="form-text text-muted">{info}</small>}
       {error && <div className="invalid-feedback">{error}</div>}
     </div>
   );
 };
 
-TextFieldGroup.defaultProps = {
-	type: "text"
-}
-
-export default TextFieldGroup;
+export default SelectListGroup;

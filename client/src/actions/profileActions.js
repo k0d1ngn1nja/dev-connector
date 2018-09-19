@@ -1,7 +1,5 @@
 import axios from "axios";
-import jwt_decode from "jwt-decode";
-import setAuthToken from "../util/setAuthToken";
-import { GET_PROFILE, PROFILE_LOADING, GET_ERRORS, CLEAR_CURRENT_PROFILE } from "./types";
+import { GET_PROFILE, PROFILE_LOADING, CLEAR_CURRENT_PROFILE } from "./types";
 
 // get current profile
 export const currentProfileAction = () => (dispatch) =>{
