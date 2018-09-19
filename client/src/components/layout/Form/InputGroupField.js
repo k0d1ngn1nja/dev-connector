@@ -2,7 +2,7 @@ import React from 'react';
 import classnames from "classnames";
 
 const InputGroupField = (props) => {
-	const {name, placeholder, value, error, onChange, icon, type} = props;
+	const {name, placeholder, value, error, onChange, icon} = props;
 
   return (
     <div className="input-group mb-3">

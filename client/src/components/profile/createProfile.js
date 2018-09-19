@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import TextFieldGroup from "../layout/Form/TextFieldGroup";
 import TextAreaField from "../layout/Form/TextAreaField";
 import SelectListGroup from "../layout/Form/SelectListGroup";
 import InputGroupField from "../layout/Form/InputGroupField";
+import { createProfileAction } from "../../actions/profileActions";
 
 class CreateProfile extends Component {
 	constructor(props){
@@ -16,7 +18,7 @@ class CreateProfile extends Component {
 			location: "",
 			status: "",
 			skills: "",
-			githubusername: "",
+			githubid: "",
 			bio: "",
 			twitter: "",
 			facebook: "",
@@ -27,15 +29,40 @@ class CreateProfile extends Component {
 		}
 	}
 	
+	componentWillReceiveProps(nextProps){
+		if(nextProps.errors){
+			this.setState({errors: nextProps.errors});
+		}
+	}
+
+	// static getDerivedStateFromProps = nextProps => {
+ //  	return { errors: nextProps.errors };
+ // 	};
+
 	onChange = (e) =>{
 		this.setState({
 			[e.target.name]: e.target.value
-		})
+		});
 	}
 
 	onFormSubmit = (e) =>{
 		e.preventDefault();
-		console.log("form submitted");
+		const profileData = {
+			handle: this.state.handle,
+			company: this.state.company,
+			website: this.state.website,
+			location: this.state.location,
+			status: this.state.status,
+			skills: this.state.skills,
+			githubid: this.state.githubid,
+			bio: this.state.bio,
+			twitter: this.state.twitter,
+			facebook: this.state.facebook,
+			linkedin: this.state.linkedin,
+			instagram: this.state.instagram
+		};
+		
+		this.props.createProfileAction(profileData, this.props.history);
 	}
 
 	toggleSocialInputsView = () =>{
@@ -43,10 +70,10 @@ class CreateProfile extends Component {
 			toggleSocialLinks: !prevState.toggleSocialLinks
 		}))
 	}
+
 	render() {
+		const { errors, toggleSocialLinks } = this.state;
 		let displaySocialInputs;
-		
-		const {errors, toggleSocialLinks} = this.state;
 		const options = [
 			{label: "* Select Profession Status", value: 0},
 			{label: "Junior Developer", value: "Junior Developer"},
@@ -66,7 +93,7 @@ class CreateProfile extends Component {
 						icon="fab fa-twitter"
 						value={this.state.twitter}
 						onChange={this.onChange}
-						errors={errors.twitter}
+						error={errors.twitter}
 						info="If you want your latest repos and a Github link, include your username"
 					/>
 					<InputGroupField 
@@ -75,7 +102,7 @@ class CreateProfile extends Component {
 						icon="fab fa-facebook"
 						value={this.state.facebook}
 						onChange={this.onChange}
-						errors={errors.facebook}
+						error={errors.facebook}
 					/>
 					<InputGroupField 
 						placeholder="Linkedin Profile URL"
@@ -83,7 +110,7 @@ class CreateProfile extends Component {
 						icon="fab fa-linkedin"
 						value={this.state.linkedin}
 						onChange={this.onChange}
-						errors={errors.linkedin}
+						error={errors.linkedin}
 					/>
 					<InputGroupField 
 						placeholder="instagram Profile URL"
@@ -91,7 +118,7 @@ class CreateProfile extends Component {
 						icon="fab fa-instagram"
 						value={this.state.instagram}
 						onChange={this.onChange}
-						errors={errors.instagram}
+						error={errors.instagram}
 						info="If you want your latest repos and a Github link, include your username"
 					/>
 				</React.Fragment>
@@ -109,11 +136,11 @@ class CreateProfile extends Component {
 
 							<form onSubmit={this.onFormSubmit}>
 								<TextFieldGroup
-									placeholder="* Profile Hanle"
+									placeholder="* Profile Handle"
 									name="handle"
 									value={this.state.handle}
 									onChange={this.onChange}
-									errors={errors.handle}
+									error={errors.handle}
 									info="A unique handle for your profile URL. Your full name, company name, nickname"
 								/>
 								<SelectListGroup 
@@ -130,7 +157,7 @@ class CreateProfile extends Component {
 									name="company"
 									value={this.state.company}
 									onChange={this.onChange}
-									errors={errors.company}
+									error={errors.company}
 									info="A unique handle for your profile URL. Your full name, company name, nickname"
 								/>
 								<TextFieldGroup
@@ -138,7 +165,7 @@ class CreateProfile extends Component {
 									name="website"
 									value={this.state.website}
 									onChange={this.onChange}
-									errors={errors.website}
+									error={errors.website}
 									info="Could be your own or a company website"
 								/>
 								<TextFieldGroup
@@ -146,7 +173,7 @@ class CreateProfile extends Component {
 									name="location"
 									value={this.state.location}
 									onChange={this.onChange}
-									errors={errors.location}
+									error={errors.location}
 									info="City & state suggested (eg. Boston, MA)"
 								/>
 								<TextFieldGroup
@@ -154,15 +181,15 @@ class CreateProfile extends Component {
 									name="skills"
 									value={this.state.skills}
 									onChange={this.onChange}
-									errors={errors.skills}
+									error={errors.skills}
 									info="Please use comma separated values (eg. HTML,CSS,JavaScript,PHP)"
 								/>
 								<TextFieldGroup
 									placeholder="Github Username"
-									name="githubusername"
-									value={this.state.githubusername}
+									name="githubid"
+									value={this.state.githubid}
 									onChange={this.onChange}
-									errors={errors.githubusername}
+									error={errors.githubid}
 									info="If you want your latest repos and a Github link, include your username"
 								/>
 								<TextAreaField
@@ -170,7 +197,7 @@ class CreateProfile extends Component {
 									name="bio"
 									value={this.state.bio}
 									onChange={this.onChange}
-									errors={errors.bio}
+									error={errors.bio}
 									info="Tell us a little about yourself"
 								/>
 
@@ -196,6 +223,6 @@ class CreateProfile extends Component {
 const mapStateToProps = (state) =>({
 	profile: state.profile,
 	errors: state.errors
-})
+});
 
-export default connect(mapStateToProps)(CreateProfile);
+export default connect(mapStateToProps, {createProfileAction})(CreateProfile);
