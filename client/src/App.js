@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import jwt_decode from "jwt-decode";
@@ -12,6 +12,8 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Footer from "./components/layout/Footer";
+import PrivateRoute from "./util/privateRoute";
+
 import './App.css';
 
 // check for token
@@ -46,7 +48,9 @@ class App extends Component {
 		       		<div className="container">
 								<Route exact path="/register" component={ Register } />
 								<Route exact path="/login" component={ Login } />
-								<Route exact path="/dashboard" component={ Dashboard } />
+								<Switch>
+									<PrivateRoute exact path="/dashboard" component={ Dashboard } />
+								</Switch>
 		       		</div>
 						<Footer />
 		      </div>

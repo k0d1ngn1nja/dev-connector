@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import Spinner from "../layout/Spinner";
+import Spinner from "../../util/Spinner";
 import { Link } from "react-router-dom";
 import { currentProfileAction } from "../../actions/profileActions";
 
