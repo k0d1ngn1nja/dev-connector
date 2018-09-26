@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import Spinner from "../../util/Spinner";
 import { Link } from "react-router-dom";
-import { currentProfileAction } from "../../actions/profileActions";
+import { currentProfileAction, deleteProfileAction } from "../../actions/profileActions";
+import ProfileActions from "./ProfileActions";
 
 class Dashboard extends Component {
 	componentDidMount(){
 		this.props.currentProfileAction();
+	}
+
+	onDeleteClick = () =>{
+		this.props.deleteProfileAction();
 	}
 
 	render() {
@@ -19,7 +24,14 @@ class Dashboard extends Component {
 		} else{
 			// check if logged in user has a profile
 			if(Object.keys(profile).length > 0){
-				dashboardContent = <h4>Display Profile</h4>
+				dashboardContent = (
+					<div>
+						<p className="lead text-muted">Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>,</p>
+						<ProfileActions />
+						<div style={{marginBottom: "60px"}}></div>
+						<button onClick={this.onDeleteClick} className="btn btn-danger">Delete Account</button>
+					</div>
+				);
 			} else{
 				//user is logged in but has no profile
 				dashboardContent = (
@@ -52,4 +64,4 @@ const mapStateToProps = (state) =>({
 	auth: state.auth
 });
 
-export default connect(mapStateToProps, { currentProfileAction })(Dashboard);
+export default connect(mapStateToProps, { currentProfileAction, deleteProfileAction })(Dashboard);

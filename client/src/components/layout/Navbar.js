@@ -18,6 +18,10 @@ class Navbar extends Component {
 		const loggedInLinks = (
 			<React.Fragment>
 				<li className="nav-item">
+	        <Link className="nav-link" to="/dashboard">Dashboard</Link>
+	      </li>
+
+				<li className="nav-item">
 	        <a className="nav-link" href="#!" onClick={this.onLogoutClick}>
 	        	Logout
 	        	<img src={user.avatar} alt={user.name} title="You must have a Gravatar linked to your email" style={{width: "25px", marginLeft: "5px"}} className="rounded-circle" />

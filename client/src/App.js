@@ -13,6 +13,7 @@ import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import Footer from "./components/layout/Footer";
 import CreateProfile from "./components/profile/createProfile";
+import EditProfile from "./components/profile/EditProfile";
 import PrivateRoute from "./util/privateRoute";
 
 import './App.css';
@@ -52,6 +53,7 @@ class App extends Component {
 								<Switch>
 									<PrivateRoute exact path="/dashboard" component={ Dashboard } />
 									<PrivateRoute exact path="/profile/new" component={ CreateProfile } />
+									<PrivateRoute exact path="/edit-profile" component={ EditProfile } />
 								</Switch>
 		       		</div>
 						<Footer />
